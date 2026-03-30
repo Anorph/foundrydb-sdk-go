@@ -134,13 +134,6 @@ func TestListBackups_MalformedJSON(t *testing.T) {
 
 func TestTriggerBackup_Success(t *testing.T) {
 	req := CreateBackupRequest{BackupType: BackupTypeFull}
-	want := Backup{
-		ID:         "new-bkp",
-		ServiceID:  "svc-1",
-		Status:     BackupStatusPending,
-		BackupType: BackupTypeFull,
-		CreatedAt:  "2026-01-04T10:00:00Z",
-	}
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
@@ -157,7 +150,8 @@ func TestTriggerBackup_Success(t *testing.T) {
 			t.Errorf("expected full backup type, got %s", body.BackupType)
 		}
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(want)
+		// API returns backup_id (not id) in the trigger response envelope.
+		w.Write([]byte(`{"backup_id":"new-bkp","status":"pending"}`))
 	}))
 	defer srv.Close()
 
@@ -178,12 +172,8 @@ func TestTriggerBackup_DefaultBackupType(t *testing.T) {
 	// Empty backup type should still work (platform default)
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(Backup{
-			ID:         "bkp-default",
-			ServiceID:  "svc-1",
-			Status:     BackupStatusPending,
-			BackupType: BackupTypeFull,
-		})
+		// API returns backup_id (not id) in the trigger response envelope.
+		w.Write([]byte(`{"backup_id":"bkp-default","status":"pending"}`))
 	}))
 	defer srv.Close()
 
@@ -204,7 +194,8 @@ func TestTriggerBackup_IncrementalType(t *testing.T) {
 		if body.BackupType != BackupTypeIncremental {
 			t.Errorf("expected incremental, got %s", body.BackupType)
 		}
-		json.NewEncoder(w).Encode(Backup{ID: "bkp-incr", BackupType: BackupTypeIncremental, Status: BackupStatusPending})
+		// API returns backup_id (not id) in the trigger response envelope.
+		w.Write([]byte(`{"backup_id":"bkp-incr","status":"pending"}`))
 	}))
 	defer srv.Close()
 
@@ -217,7 +208,8 @@ func TestTriggerBackup_IncrementalType(t *testing.T) {
 
 func TestTriggerBackup_PITRType(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(Backup{ID: "bkp-pitr", BackupType: BackupTypePITR, Status: BackupStatusPending})
+		// API returns backup_id (not id) in the trigger response envelope.
+		w.Write([]byte(`{"backup_id":"bkp-pitr","status":"pending"}`))
 	}))
 	defer srv.Close()
 

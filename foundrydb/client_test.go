@@ -155,7 +155,7 @@ func TestDo_ContentTypeSetForBody(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotCT = r.Header.Get("Content-Type")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"uuid":"1","name":"svc","status":"running"}`))
+		w.Write([]byte(`{"id":"1","name":"svc","status":"running"}`))
 	}))
 	defer srv.Close()
 
@@ -237,7 +237,7 @@ func TestCheckResponse_200OK(t *testing.T) {
 func TestCheckResponse_201Created(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte(`{"uuid":"new-id","name":"svc","status":"provisioning"}`))
+		w.Write([]byte(`{"id":"new-id","name":"svc","status":"provisioning"}`))
 	}))
 	defer srv.Close()
 
