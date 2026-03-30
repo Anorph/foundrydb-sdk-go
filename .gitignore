@@ -1,6 +1,6 @@
 # Compiled binaries
-basic
-multi-org
+examples/basic/basic
+examples/multi-org/multi-org
 *.exe
 *.out
 

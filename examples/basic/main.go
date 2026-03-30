@@ -46,7 +46,7 @@ func main() {
 	storageSizeGB := 50
 	fmt.Println("\nCreating PostgreSQL service...")
 	svc, err := client.CreateService(ctx, foundrydb.CreateServiceRequest{
-		Name:          "sdk-example-pg",
+		Name:          "sdk-basic-run",
 		DatabaseType:  foundrydb.PostgreSQL,
 		Version:       "17",
 		PlanName:      "tier-2",
@@ -60,8 +60,8 @@ func main() {
 	fmt.Printf("Service created: id=%s status=%s\n", svc.ID, svc.Status)
 
 	// Wait up to 15 minutes for the service to become running.
-	fmt.Println("Waiting for service to become running (up to 15 minutes)...")
-	svc, err = client.WaitForRunning(ctx, svc.ID, 15*time.Minute)
+	fmt.Println("Waiting for service to become running (up to 20 minutes)...")
+	svc, err = client.WaitForRunning(ctx, svc.ID, 20*time.Minute)
 	if err != nil {
 		log.Fatalf("WaitForRunning: %v", err)
 	}
