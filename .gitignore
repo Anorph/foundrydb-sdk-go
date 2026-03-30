@@ -1,0 +1,12 @@
+# Compiled binaries
+basic
+multi-org
+*.exe
+*.out
+
+# Test artifacts
+*.test
+*.prof
+
+# Module download cache
+vendor/
