@@ -87,7 +87,7 @@ type DNSRecord struct {
 
 // Service represents a managed database service returned by the API.
 type Service struct {
-	ID                  string        `json:"uuid"`
+	ID                  string        `json:"id"`
 	Name                string        `json:"name"`
 	DatabaseType        DatabaseType  `json:"database_type"`
 	Version             string        `json:"version"`
