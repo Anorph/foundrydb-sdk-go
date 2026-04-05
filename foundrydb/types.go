@@ -87,7 +87,7 @@ type DNSRecord struct {
 
 // Service represents a managed database service returned by the API.
 type Service struct {
-	ID                  string        `json:"id"`
+	ID                  string        `json:"uuid"`
 	Name                string        `json:"name"`
 	DatabaseType        DatabaseType  `json:"database_type"`
 	Version             string        `json:"version"`
@@ -127,6 +127,15 @@ type CreateServiceRequest struct {
 	EncryptionEnabled   *bool           `json:"encryption_enabled,omitempty"`
 	AllowedCIDRs        []string        `json:"allowed_cidrs,omitempty"`
 	MaintenanceWindow   string          `json:"maintenance_window,omitempty"`
+
+	// Agent workload fields
+	Preset           string            `json:"preset,omitempty"`              // Service preset (e.g., "agent-valkey-session")
+	IsEphemeral      *bool             `json:"is_ephemeral,omitempty"`        // Mark as ephemeral
+	TTLHours         *int              `json:"ttl_hours,omitempty"`           // Auto-delete after N hours (1-720)
+	CreatedByAgentID string            `json:"created_by_agent_id,omitempty"` // Agent identifier
+	AgentFramework   string            `json:"agent_framework,omitempty"`     // Framework: langchain, crewai, autogen, claude
+	AgentPurpose     string            `json:"agent_purpose,omitempty"`       // Purpose: conversation_history, session_cache
+	Labels           map[string]string `json:"labels,omitempty"`              // Custom key-value labels
 }
 
 // UpdateServiceRequest is the request body for PATCH /managed-services/{id}.

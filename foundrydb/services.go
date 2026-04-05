@@ -101,6 +101,19 @@ func (c *Client) DeleteService(ctx context.Context, id string) error {
 	return err
 }
 
+// ListPresets returns all available service presets for AI agent workloads.
+func (c *Client) ListPresets(ctx context.Context) (json.RawMessage, error) {
+	resp, err := c.do(ctx, http.MethodGet, "/managed-services/presets", nil, "")
+	if err != nil {
+		return nil, err
+	}
+	data, err := checkResponse(resp)
+	if err != nil {
+		return nil, err
+	}
+	return json.RawMessage(data), nil
+}
+
 // WaitForRunning polls the service until it reaches "running" status or the timeout expires.
 // Polling interval is 10 seconds. The context deadline (if any) takes precedence over timeout.
 //
